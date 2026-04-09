@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>NovaBuilder Pro</title>
+
+<style>
+body {
+  margin:0;
+  font-family:Arial;
+}
+
+/* Login */
+#login {
+  text-align:center;
+  padding:50px;
+}
+
+/* Platform */
+#platform {
+  display:none;
+  height:100vh;
+}
+
+/* Layout */
+#container {
+  display:flex;
+  height:100%;
+}
+
+/* Sidebar */
+#sidebar {
+  width:220px;
+  background:#111;
+  color:white;
+  padding:10px;
+}
+
+#sidebar button {
+  width:100%;
+  margin:5px 0;
+  padding:10px;
+  background:#00ffcc;
+  border:none;
+  cursor:pointer;
+}
+
+/* Main */
+#main {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+}
+
+#topbar {
+  background:#222;
+  color:white;
+  padding:10px;
+}
+
+#preview {
+  flex:1;
+  background:white;
+  padding:20px;
+  overflow:auto;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <h1>🚀 NovaBuilder</h1>
+  <input id="name" placeholder="Enter Name"><br><br>
+  <button onclick="enter()">Enter</button>
+</div>
+
+<!-- PLATFORM -->
+<div id="platform">
+
+<div id="container">
+
+  <!-- Sidebar -->
+  <div id="sidebar">
+    <h3>NovaBuilder</h3>
+
+    <button onclick="add('text')">➕ Text</button>
+    <button onclick="add('button')">🔘 Button</button>
+    <button onclick="add('image')">🖼 Image</button>
+
+    <input type="file" id="imgUpload"><br><br>
+
+    <button onclick="publish()">🚀 Publish</button>
+  </div>
+
+  <!-- Main -->
+  <div id="main">
+
+    <div id="topbar">
+      🌐 Live Website Preview
+    </div>
+
+    <div id="preview"></div>
+
+  </div>
+
+</div>
+
+</div>
+
+<script>
+
+let imgURL = "";
+
+// login
+function enter(){
+  let name = document.getElementById("name").value;
+  if(name==""){
+    alert("Enter name");
+    return;
+  }
+  document.getElementById("login").style.display="none";
+  document.getElementById("platform").style.display="block";
+}
+
+// image upload
+document.getElementById("imgUpload").onchange = function(e){
+  let file = e.target.files[0];
+  imgURL = URL.createObjectURL(file);
+};
+
+// add elements
+function add(type){
+
+  if(type=="text"){
+    let txt = prompt("Enter text:");
+    document.getElementById("preview").innerHTML += "<p>"+txt+"</p>";
+  }
+
+  if(type=="button"){
+    let txt = prompt("Button text:");
+    document.getElementById("preview").innerHTML += "<button>"+txt+"</button>";
+  }
+
+  if(type=="image"){
+    if(imgURL==""){
+      alert("Upload image first");
+      return;
+    }
+    document.getElementById("preview").innerHTML += "<img src='"+imgURL+"' width='150'><br>";
+  }
+}
+
+// publish
+function publish(){
+  let html = document.getElementById("preview").innerHTML;
+
+  let blob = new Blob([html], {type:"text/html"});
+  let a = document.createElement("a");
+
+  a.href = URL.createObjectURL(blob);
+  a.download = "novabuilder-site.html";
+  a.click();
+
+  alert("✅ Download ho gaya! GitHub pe upload karke link le 🌐");
+}
+
+</script>
+
+</body>
+</html>
